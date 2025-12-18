@@ -163,7 +163,7 @@ export enum ObjectType {
 /**
  * GUIDs used to identify objects within an ASF file.
  */
-export const Guids = {
+export const Guids: Record<string, UuidWrapper> = {
     /**
      * Indicates that an object is a {@link ContentDescriptionObject}.
      */

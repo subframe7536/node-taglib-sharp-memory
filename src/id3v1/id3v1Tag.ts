@@ -18,7 +18,7 @@ export default class Id3v1Tag extends Tag {
     /**
      * Identifier used to recognize an ID3v1 tag.
      */
-    public static readonly FILE_IDENTIFIER = ByteVector.fromString("TAG", StringType.UTF8);
+    public static readonly FILE_IDENTIFIER: ByteVector = ByteVector.fromString("TAG", StringType.UTF8);
 
     /**
      * Size of an ID3v1 tag.

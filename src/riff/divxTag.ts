@@ -16,7 +16,7 @@ export default class DivxTag extends Tag {
     /**
      * Identifier used to recognize DivX tags.
      */
-    public static readonly FILE_IDENTIFIER = ByteVector.fromString("DIVXTAG", StringType.Latin1).makeReadOnly();
+    public static readonly FILE_IDENTIFIER: ByteVector = ByteVector.fromString("DIVXTAG", StringType.Latin1).makeReadOnly();
 
     /**
      * Size of a DivX tag in bytes.

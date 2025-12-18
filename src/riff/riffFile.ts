@@ -29,7 +29,7 @@ export default class RiffFile extends File {
     /**
      * Identifier at the beginning of a RIFF file.
      */
-    public static readonly FILE_IDENTIFIER = ByteVector.fromString("RIFF", StringType.Latin1).makeReadOnly();
+    public static readonly FILE_IDENTIFIER: ByteVector = ByteVector.fromString("RIFF", StringType.Latin1).makeReadOnly();
 
     private _fileType: string;
     private _properties: Properties;

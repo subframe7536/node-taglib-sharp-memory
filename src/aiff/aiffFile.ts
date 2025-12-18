@@ -18,27 +18,27 @@ export default class AiffFile extends File {
      * Identifier used to recognize an AIFF form type.
      */
     // @TODO: Add support for AIFF-C files - it's pretty much the same
-    public static readonly AIFF_FORM_TYPE = ByteVector.fromString("AIFF", StringType.UTF8).makeReadOnly();
+    public static readonly AIFF_FORM_TYPE: ByteVector = ByteVector.fromString("AIFF", StringType.UTF8).makeReadOnly();
 
     /**
      * Identifier used to recognize an AIFF common chunk.
      */
-    public static readonly COMM_IDENTIFIER = ByteVector.fromString("COMM", StringType.UTF8).makeReadOnly();
+    public static readonly COMM_IDENTIFIER: ByteVector = ByteVector.fromString("COMM", StringType.UTF8).makeReadOnly();
 
     /**
      * Identifier used to recognize an AIFF file.
      */
-    public static readonly FILE_IDENTIFIER = ByteVector.fromString("FORM", StringType.UTF8).makeReadOnly();
+    public static readonly FILE_IDENTIFIER: ByteVector = ByteVector.fromString("FORM", StringType.UTF8).makeReadOnly();
 
     /**
      * Identifier used to recognize an AIFF ID3 chunk.
      */
-    public static readonly ID3_IDENTIFIER = ByteVector.fromString("ID3 ", StringType.UTF8).makeReadOnly();
+    public static readonly ID3_IDENTIFIER: ByteVector = ByteVector.fromString("ID3 ", StringType.UTF8).makeReadOnly();
 
     /**
      * Identifier used to recognize an AIFF sound data chunk.
      */
-    public static readonly SOUND_IDENTIFIER = ByteVector.fromString("SSND", StringType.UTF8).makeReadOnly();
+    public static readonly SOUND_IDENTIFIER: ByteVector = ByteVector.fromString("SSND", StringType.UTF8).makeReadOnly();
 
     // #endregion
 

@@ -44,7 +44,7 @@ export class Id3v2TagHeader {
     /**
      * The identifier used to recognize an ID3v2 header.
      */
-    public static readonly FILE_IDENTIFIER = ByteVector.fromString("ID3", StringType.Latin1).makeReadOnly();
+    public static readonly FILE_IDENTIFIER: ByteVector = ByteVector.fromString("ID3", StringType.Latin1).makeReadOnly();
 
     private _flags: Id3v2TagHeaderFlags = Id3v2TagHeaderFlags.None;
     private _majorVersion: number = 0;

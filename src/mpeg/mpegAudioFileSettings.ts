@@ -9,7 +9,7 @@ export default class MpegAudioFileSettings {
     /**
      * The types of tags that are supported by MPEG audio files.
      */
-    public static readonly SUPPORTED_TAG_TYPES = TagTypes.Id3v1 | TagTypes.Id3v2 | TagTypes.Ape;
+    public static readonly SUPPORTED_TAG_TYPES: number = TagTypes.Id3v1 | TagTypes.Id3v2 | TagTypes.Ape;
 
     private static _defaultTagTypes = TagTypes.Id3v1 | TagTypes.Id3v2;
     private static _preferApeTagAtFileEnd = true;

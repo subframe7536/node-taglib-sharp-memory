@@ -9,7 +9,7 @@ export default class AviFileSettings {
     /**
      * The types of tags that are supported by AVI files.
      */
-    public static readonly SUPPORTED_TAG_TYPES = TagTypes.DivX | TagTypes.Id3v2 | TagTypes.RiffInfo | TagTypes.MovieId;
+    public static readonly SUPPORTED_TAG_TYPES: number = TagTypes.DivX | TagTypes.Id3v2 | TagTypes.RiffInfo | TagTypes.MovieId;
 
     private static _defaultTagTypes = AviFileSettings.SUPPORTED_TAG_TYPES;
 

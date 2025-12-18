@@ -14,7 +14,7 @@ export default class Id3v2TagFooter {
     /**
      * Identifier used to recognize an ID3v2 footer.
      */
-    public static readonly FILE_IDENTIFIER = ByteVector.fromString("3DI", StringType.Latin1).makeReadOnly();
+    public static readonly FILE_IDENTIFIER: ByteVector = ByteVector.fromString("3DI", StringType.Latin1).makeReadOnly();
 
     private _flags: Id3v2TagHeaderFlags = Id3v2TagHeaderFlags.FooterPresent;
     private _majorVersion: number = 0;

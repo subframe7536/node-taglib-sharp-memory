@@ -18,7 +18,7 @@ export default class SandwichTag extends CombinedTag {
     /**
      * List of the tag types that are supported by a sandwich file tag.
      */
-    public static readonly SUPPORTED_TAG_TYPES = TagTypes.Ape | TagTypes.Id3v1 | TagTypes.Id3v2;
+    public static readonly SUPPORTED_TAG_TYPES: number = TagTypes.Ape | TagTypes.Id3v1 | TagTypes.Id3v2;
 
     private readonly _defaultTagMappingTable: Map<TagTypes, () => boolean>;
     private readonly _endTag: EndTag;
