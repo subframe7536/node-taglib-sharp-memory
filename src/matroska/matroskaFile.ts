@@ -5,13 +5,13 @@ import MatroskaTag from "./matroskaTag";
 import MatroskaTagCollection from "./matroskaTagCollection";
 import MatroskaTagValue from "./matroskaTagValue";
 import TrackFactory from "./tracks/trackFactory";
-import {ByteVector} from "../byteVector";
+import {ByteVector, StringType} from "../byteVector";
 import {CorruptFileError, NotImplementedError, UnsupportedFormatError} from "../errors";
 import {File, FileAccessMode, ReadStyle} from "../file";
 import {IFileAbstraction} from "../fileAbstraction";
 import {EbmlIds} from "../ebml/ids";
 import {MatroskaIds} from "./matroskaIds";
-import {MatroskaTagTarget} from "./matroskaTagTarget";
+import {MatroskaTagTarget, MatroskaTagTargetType} from "./matroskaTagTarget";
 import {MediaTypes, Properties} from "../properties";
 import {Tag, TagTypes} from "../tag";
 import {Track} from "./tracks/track";
@@ -200,13 +200,22 @@ export default class MatroskaFile extends File {
         // @TODO: If read style is too low, don't read
         let duration: number = 0;
         let timeCodeScale: number;
+        let segmentTitle: string;
 
         const segmentInfoParseActions = new Map<number, (parser: EbmlElement) => void>([
             [MatroskaIds.DURATION, e => duration = e.getDouble()],
             [MatroskaIds.TIME_CODE_SCALE, e => timeCodeScale = e.getSafeUint()],
-            [MatroskaIds.TITLE, undefined] // @TODO Is this used? If so how do we use it?
+            [MatroskaIds.TITLE, e => segmentTitle = e.getString()]
         ]);
         EbmlParser.processElements(infoElement.getParser(), segmentInfoParseActions);
+
+        // Store segment title as a tag if present
+        if (segmentTitle) {
+            const titleTagValue = MatroskaTagValue.fromValue(this._header.docTypeVersion || 4, "TITLE", segmentTitle);
+            const titleTagTarget = MatroskaTagTarget.fromEmpty(MatroskaTagTargetType.EPISODE);
+            const titleTag = new MatroskaTag(titleTagValue, titleTagTarget);
+            readState.tags.push(titleTag);
+        }
 
         // Calculate duration in milliseconds
         // Matroska stores duration as nanoseconds when multiplied by the timecode scale. There are

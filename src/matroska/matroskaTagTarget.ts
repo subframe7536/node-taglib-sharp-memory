@@ -107,6 +107,16 @@ export class MatroskaTagTarget {
         ]);
         EbmlParser.processElements(element.getParser(), parserActions);
 
+        // Validate and sanitize targetTypeValue
+        // @ts-expect-error fxxk
+        if (targetTypeValue === undefined || !Number.isSafeInteger(targetTypeValue) || targetTypeValue < 0 || targetTypeValue > 255) {
+            targetTypeValue = 50; // Default to ALBUM/EPISODE level
+        }
+        // @ts-expect-error fxxk
+        else if (targetTypeValue > 70) {
+            targetTypeValue = 70; // Clamp to COLLECTION (max valid Matroska spec value)
+        }
+
         target._targetType = new MatroskaTagTargetType(targetTypeValue, targetTypeString);
 
         return target;

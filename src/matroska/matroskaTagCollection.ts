@@ -29,7 +29,6 @@ export default class MatroskaTagCollection extends Tag {
 
     private static readonly PERFORMER_AUDIO_KEY = "PERFORMER";
     private static readonly PERFORMER_VIDEO_KEY = "ACTOR";
-    private static readonly NUMERIC_GENRE_REGEX = /\((\d+)\)/;
 
     private readonly _albumPartTagLevel: number;
     private readonly _albumTagLevel: number;
@@ -110,7 +109,17 @@ export default class MatroskaTagCollection extends Tag {
 
     /** @inheritDoc */
     public get title(): string {
-        return this.getFileTagValues("TITLE").firstString;
+        let result = this.getFileTagValues("TITLE").firstString;
+        
+        // If not found, try other common title tag names
+        if (!result) {
+            result = this.getFileTagValues("TRACK_NAME").firstString;
+        }
+        if (!result) {
+            result = this.getFileTagValues("NAME").firstString;
+        }
+        
+        return result || "";
     }
 
     /** @inheritDoc */
@@ -131,7 +140,15 @@ export default class MatroskaTagCollection extends Tag {
 
     /** @inheritDoc */
     public get performers(): string[] {
-        return this.getTagValuesRecursively(this._fileTagLevel, this._performerKey).allStrings;
+        let result = this.getTagValuesRecursively(this._fileTagLevel, this._performerKey).allStrings;
+        
+        // If not found and this is a video file, also try looking for "ARTIST" tags
+        // This handles cases where video files contain audio-style metadata
+        if (result.length === 0 && this._isVideo) {
+            result = this.getTagValuesRecursively(this._fileTagLevel, "ARTIST").allStrings;
+        }
+        
+        return result;
     }
 
     /** @inheritDoc */
@@ -149,7 +166,15 @@ export default class MatroskaTagCollection extends Tag {
 
     /** @inheritDoc */
     public get albumArtists(): string[] {
-        return this.getTagValues(this._albumTagLevel, "ARTIST").allStrings;
+        let result = this.getTagValues(this._albumTagLevel, "ARTIST").allStrings;
+        
+        // If not found, also try looking for "ALBUM_ARTIST" tags
+        // This handles cases where files use the more explicit ALBUM_ARTIST tag name
+        if (result.length === 0) {
+            result = this.getTagValuesRecursively(this._fileTagLevel, "ALBUM_ARTIST").allStrings;
+        }
+        
+        return result;
     }
 
     /** @inheritDoc */
@@ -171,7 +196,16 @@ export default class MatroskaTagCollection extends Tag {
 
     /** @inheritDoc */
     public get album(): string {
-        return this.getTagValues(this._albumTagLevel, "TITLE").firstString;
+        // First try the standard approach for the media type
+        let result = this.getTagValues(this._albumTagLevel, "TITLE").firstString;
+        
+        // If not found and this is a video file, also try looking for "ALBUM" tags
+        // This handles cases where video files contain audio-style metadata
+        if (!result && this._isVideo) {
+            result = this.getTagValuesRecursively(this._fileTagLevel, "ALBUM").firstString;
+        }
+        
+        return result;
     }
 
     /** @inheritDoc */
@@ -210,10 +244,17 @@ export default class MatroskaTagCollection extends Tag {
     /** @inheritDoc */
     public get year(): number {
         let value = this.getTagValuesRecursively(this._fileTagLevel, "DATE_RECORDED").firstString;
+        
+        // If not found, also try looking for "DATE" tags
+        // This handles cases where files use the simpler DATE tag name
+        if (!value) {
+            value = this.getTagValuesRecursively(this._fileTagLevel, "DATE").firstString;
+        }
+        
         let result = 0;
 
         // Parse date to retrieve year
-        // Expected format: YYYY-MM-DD HH:MM:SS.MSS
+        // Expected format: YYYY-MM-DD HH:MM:SS.MSS or just YYYY
         if (value) {
             const firstDash = value.indexOf('-');
             if (firstDash > 0) {
@@ -238,7 +279,15 @@ export default class MatroskaTagCollection extends Tag {
 
     /** @inheritDoc */
     public get disc(): number {
-        return this.getTagValues(this._albumPartTagLevel, "PART_NUMBER").firstUintFromString || 0;
+        let result = this.getTagValues(this._albumPartTagLevel, "PART_NUMBER").firstUintFromString;
+        
+        // If not found, also try looking for "DISC" tags
+        // This handles cases where files use the more explicit DISC tag name
+        if (!result) {
+            result = this.getTagValuesRecursively(this._fileTagLevel, "DISC").firstUintFromString;
+        }
+        
+        return result || 0;
     }
 
     /** @inheritDoc */
