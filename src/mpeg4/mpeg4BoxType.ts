@@ -1,8 +1,11 @@
 import {ByteVector, StringType} from "../byteVector";
 
 /**
- * Provides references to different box types used by the library. This class is used to severely reduce the number
- * of times these types are created in {@link AppleTag,} greatly improving the speed at which warm files are read.
+ * Provides references to different box types used by the library. This class is used to severely
+ * reduce the number of times these types are created in {@link AppleTag,} greatly improving the
+ * speed at which warm files are read.
+ *
+ * These box types were cross-referenced with FFMPEG source and Exiftool database.
  */
 const Mpeg4BoxType: Record<string, ByteVector> = {
     /** QuickTime album artist box */
@@ -13,7 +16,15 @@ const Mpeg4BoxType: Record<string, ByteVector> = {
     ART: getType("©ART"),
     /** QuickTime comment box */
     CMT: getType("©cmt"),
-    /** QuickTime conductor box? @TODO: Verify this works should not be ©con */
+    /**
+     * QuickTime conductor box. This is listed in the FFMPEG source and Exiftool.
+     */
+    CON: getType("©con"),
+    /**
+     * Conductor box from original .NET source. This is not listed anywhere in the Exiftool or
+     * FFMPEG docs.
+     * @TODO: Remove this when backwards compat time has ended.
+     */
     COND: getType("cond"),
     /** QuickTime cover art box */
     COVR: getType("covr"),
@@ -91,7 +102,15 @@ const Mpeg4BoxType: Record<string, ByteVector> = {
     STCO: getType("stco"),
     /** ISO sample description box */
     STSD: getType("stsd"),
-    /** Subtitle box? @TODO: There's no record of this one */
+    /**
+     * QuickTime subtitle box. This is listed in the FFMPEG source and Exiftool.
+     */
+    ST3: getType("©st3"),
+    /**
+     * Subtitle box from original .NET source. This is not listed anywhere in the Exiftool or
+     * FFMPEG docs.
+     * @TODO: Remove this when backwards compat time has ended.
+     */
     SUBT: getType("Subt"),
     /** Alias text box? @TODO: There's no record of this one */
     TEXT: getType("text"),
@@ -99,11 +118,14 @@ const Mpeg4BoxType: Record<string, ByteVector> = {
     TMPO: getType("tmpo"),
     /** ISO track container box */
     TRAK: getType("trak"),
-    /** QuickTime track number box */
+    /** QuickTime track number box @TODO: What about ©TRK as per FFMPEG source? */
     TRKN: getType("trkn"),
     /** ISO User data box */
     UDTA: getType("udta"),
-    /** Alias URL box? @TODO: There's no record of this one */
+    /**
+     * Alias URL box?
+     * @remarks Specified in FFMPEG source but not in Exiftool.
+     */
     URL: getType("©url"),
     /** ISO user extension box */
     UUID: getType("uuid"),
